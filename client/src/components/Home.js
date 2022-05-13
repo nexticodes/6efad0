@@ -9,7 +9,7 @@ import { ActiveChat } from '../components/ActiveChat';
 import { SocketContext } from '../context/socket';
 import moment from 'moment';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
 	root: {
 		height: '100vh',
 	},
@@ -26,16 +26,16 @@ const Home = ({ user, logout }) => {
 	const classes = useStyles();
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	const addSearchedUsers = (users) => {
+	const addSearchedUsers = users => {
 		const currentUsers = {};
 
 		// make table of current users so we can lookup faster
-		conversations.forEach((convo) => {
+		conversations.forEach(convo => {
 			currentUsers[convo.otherUser.id] = true;
 		});
 
 		const newState = [...conversations];
-		users.forEach((user) => {
+		users.forEach(user => {
 			// only create a fake convo if we don't already have a convo with this user
 			if (!currentUsers[user.id]) {
 				let fakeConvo = { otherUser: user, messages: [] };
@@ -47,10 +47,10 @@ const Home = ({ user, logout }) => {
 	};
 
 	const clearSearchedUsers = () => {
-		setConversations((prev) => prev.filter((convo) => convo.id));
+		setConversations(prev => prev.filter(convo => convo.id));
 	};
 
-	const saveMessage = async (body) => {
+	const saveMessage = async body => {
 		const { data } = await axios.post('/api/messages', body);
 		return data;
 	};
@@ -63,7 +63,7 @@ const Home = ({ user, logout }) => {
 		});
 	};
 
-	const postMessage = async (body) => {
+	const postMessage = async body => {
 		try {
 			const data = await saveMessage(body);
 			if (!body.conversationId) {
@@ -80,8 +80,8 @@ const Home = ({ user, logout }) => {
 
 	const addNewConvo = useCallback(
 		(recipientId, message) => {
-			setConversations((prevState) =>
-				prevState.map((convo) => {
+			setConversations(prevState =>
+				prevState.map(convo => {
 					if (convo.otherUser.id === recipientId) {
 						const convoCopy = { ...convo };
 						convoCopy.messages.push(message);
@@ -98,7 +98,7 @@ const Home = ({ user, logout }) => {
 	);
 
 	const addMessageToConversation = useCallback(
-		(data) => {
+		data => {
 			// if sender isn't null, that means the message needs to be put in a brand new convo
 			const { message, sender = null } = data;
 			if (sender !== null) {
@@ -108,11 +108,11 @@ const Home = ({ user, logout }) => {
 					messages: [message],
 				};
 				newConvo.latestMessageText = message.text;
-				setConversations((prev) => [newConvo, ...prev]);
+				setConversations(prev => [newConvo, ...prev]);
 			}
 
-			setConversations((prevState) =>
-				prevState.map((convo) => {
+			setConversations(prevState =>
+				prevState.map(convo => {
 					if (convo.id === message.conversationId) {
 						const convoCopy = { ...convo };
 						convoCopy.messages.push(message);
@@ -127,13 +127,13 @@ const Home = ({ user, logout }) => {
 		[setConversations]
 	);
 
-	const setActiveChat = (username) => {
+	const setActiveChat = username => {
 		setActiveConversation(username);
 	};
 
-	const addOnlineUser = useCallback((id) => {
-		setConversations((prev) =>
-			prev.map((convo) => {
+	const addOnlineUser = useCallback(id => {
+		setConversations(prev =>
+			prev.map(convo => {
 				if (convo.otherUser.id === id) {
 					const convoCopy = { ...convo };
 					convoCopy.otherUser = { ...convoCopy.otherUser, online: true };
@@ -145,9 +145,9 @@ const Home = ({ user, logout }) => {
 		);
 	}, []);
 
-	const removeOfflineUser = useCallback((id) => {
-		setConversations((prev) =>
-			prev.map((convo) => {
+	const removeOfflineUser = useCallback(id => {
+		setConversations(prev =>
+			prev.map(convo => {
 				if (convo.otherUser.id === id) {
 					const convoCopy = { ...convo };
 					convoCopy.otherUser = { ...convoCopy.otherUser, online: false };
@@ -193,7 +193,7 @@ const Home = ({ user, logout }) => {
 		const fetchConversations = async () => {
 			try {
 				const { data } = await axios.get('/api/conversations');
-				data.forEach((conversation) => {
+				data.forEach(conversation => {
 					conversation.messages.sort((prevMessage, currMessage) => {
 						return (
 							moment(prevMessage.createdAt).valueOf() -
