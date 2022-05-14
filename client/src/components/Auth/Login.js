@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Login = ({ user, register }) => {
+const Login = ({ user, login }) => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -32,7 +32,7 @@ const Login = ({ user, register }) => {
       <Banner/>
       <Box className={classes.introContent}>
         <ContentSwitch goTo='register'/>
-        <AuthForm mode='login' register={register}/>
+        <AuthForm mode='login' action={login}/>
       </Box>
     </Grid>
   );

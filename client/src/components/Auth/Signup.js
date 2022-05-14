@@ -32,7 +32,7 @@ const Signup = ({ user, register }) => {
       <Banner/>
       <Box className={classes.introContent}>
         <ContentSwitch goTo='login'/>
-        <AuthForm mode='register' register={register}/>
+        <AuthForm mode='register' action={register}/>
       </Box>
     </Grid>
   );

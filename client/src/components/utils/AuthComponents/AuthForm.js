@@ -7,6 +7,7 @@ import {
   TextField,
 } from '@material-ui/core';
 
+
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -48,6 +49,12 @@ const useStyles = makeStyles(() => ({
     marginRight: 'auto',
     marginLeft: 'auto',
   },
+  adorn: {
+    color: '#3A8DFF',
+    textDecoration: 'none',
+    fontSize: '0.8em',
+    fontWeight: 'bold',
+  }
 }));
 
 const FormInput = ({ label, name, type, inputProps }) => {
@@ -59,7 +66,7 @@ const FormInput = ({ label, name, type, inputProps }) => {
           label={label}
           name={name}
           type={type}
-          inputProps={inputProps}
+          InputProps={inputProps}
         />
       </FormControl>
     </Grid>
@@ -67,21 +74,25 @@ const FormInput = ({ label, name, type, inputProps }) => {
 };
 
 // mode is either 'register' or 'login';
-const AuthForm = ({ mode, register }) => {
+const AuthForm = ({ mode, action }) => {
   const classes = useStyles();
+  const isRegister = mode === 'register';
 
   const handleRegister = async event => {
     event.preventDefault();
     const form = event.currentTarget;
     const formElements = form.elements;
-    const username = formElements.username.value;
     const email = formElements.email.value;
     const password = formElements.password.value;
-
-    await register({ username, email, password });
+    
+    if (isRegister){
+      const username = formElements.username.value;
+      await action({ username, email, password });
+      return;
+    }
+    await action({ email, password });
   };
 
-  const isRegister = mode === 'register';
 
   const formLabel =
     isRegister ? 'Create an account.' : 'Welcome back!';
@@ -99,7 +110,7 @@ const AuthForm = ({ mode, register }) => {
         <FormInput
           type="password"
           label="Password"
-          inputProps={{ minLength: 6 }}
+          inputProps={{ minLength: 6, endAdornment: !isRegister && <a className={classes.adorn} href="/" target="_blank">Forgot?</a> }}
           name="password"
         />
         <Button
