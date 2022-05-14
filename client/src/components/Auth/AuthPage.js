@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Grid,
-  Box,
-} from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-import {AuthForm, Banner, ContentSwitch} from '../utils/AuthComponents';
+import { AuthForm, Banner, ContentSwitch } from './';
 
 const useStyles = makeStyles(() => ({
   introContent: {
@@ -19,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Login = ({ user, login }) => {
+const AuthPage = ({ user, login, register }) => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -29,13 +25,23 @@ const Login = ({ user, login }) => {
 
   return (
     <Grid container>
-      <Banner/>
+      <Banner />
       <Box className={classes.introContent}>
-        <ContentSwitch goTo='register'/>
-        <AuthForm mode='login' action={login}/>
+        {login && (
+          <>
+            <ContentSwitch goTo="register" />
+            <AuthForm mode="login" action={login} />
+          </>
+        )}
+        {register && (
+          <>
+            <ContentSwitch goTo="login" />
+            <AuthForm mode="register" action={register} />
+          </>
+        )}
       </Box>
     </Grid>
   );
 };
 
-export default Login;
+export default AuthPage;

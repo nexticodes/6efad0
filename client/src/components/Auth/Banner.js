@@ -1,9 +1,9 @@
-import React from 'react'
-import {Box, Grid, Typography} from '@material-ui/core';
+import React from 'react';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import bgImg from '../../../assets/bg-img.png';
-import bubble from '../../../assets/bubble.svg';
+import bgImg from '../../assets/bg-img.png';
+import bubble from '../../assets/bubble.svg';
 
 const useStyles = makeStyles(() => ({
   introBanner: {
@@ -30,22 +30,22 @@ const useStyles = makeStyles(() => ({
     fontSize: '24px',
   },
   introText: {
-    marginTop: '50px' 
-  }
-}))
+    marginTop: '50px',
+  },
+}));
 
 const Banner = () => {
   const classes = useStyles();
   return (
     <Box className={classes.introBanner}>
-    <Grid className={classes.introOverlay}>
-      <img src={bubble} alt="People smiling" />
-      <Typography variant="h4" className={classes.introText}>
-        Converse with anyone <br /> with any language
-      </Typography>
-    </Grid>
-  </Box>
-  )
-}
+      <Grid className={classes.introOverlay}>
+        <img src={bubble} alt="People smiling" />
+        <Typography variant="h4" className={classes.introText}>
+          Converse with anyone <br /> with any language
+        </Typography>
+      </Grid>
+    </Box>
+  );
+};
 
 export default Banner;
