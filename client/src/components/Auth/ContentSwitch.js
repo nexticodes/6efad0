@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     width: '80%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    margin: '10vh auto 8vh auto',
+    margin: '5vh auto 10vh auto',
   },
   authButton: {
     border: 'none',

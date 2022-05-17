@@ -18,12 +18,11 @@ const useStyles = makeStyles(() => ({
     opacity: 0.85,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     color: 'white',
     textAlign: 'center',
-    minHeight: '100vh',
-    maxHeight: '100vh',
+    height: '100%',
     width: '100%',
     fontFamily: 'Open Sans',
     fontWeight: 300,
@@ -32,6 +31,9 @@ const useStyles = makeStyles(() => ({
   introText: {
     marginTop: '50px',
   },
+  bubble: {
+    marginTop: '50%',
+  }
 }));
 
 const Banner = () => {
@@ -39,7 +41,7 @@ const Banner = () => {
   return (
     <Box className={classes.introBanner}>
       <Grid className={classes.introOverlay}>
-        <img src={bubble} alt="People smiling" />
+        <img className={classes.bubble} src={bubble} alt="People smiling" />
         <Typography variant="h4" className={classes.introText}>
           Converse with anyone <br /> with any language
         </Typography>

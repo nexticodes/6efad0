@@ -7,13 +7,12 @@ import {
   TextField,
 } from '@material-ui/core';
 
-
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
   formContainer: {
     width: '70%',
-    height: '60%',
+    height: '50%',
   },
   formGrid: {
     width: '100%',
@@ -21,6 +20,11 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+  },
+  formLabel: {
+    textAlign: 'left',
+    fontWeight: 'bolder',
+    fontSize: '1.8em'
   },
   authButton: {
     border: 'none',
@@ -34,6 +38,7 @@ const useStyles = makeStyles(() => ({
   },
   inputGroup: {
     width: '100%',
+    fontSize: '1.4em',
   },
   submitButton: {
     border: 'none',
@@ -45,16 +50,16 @@ const useStyles = makeStyles(() => ({
     background: '#3A8DFF',
     color: 'white',
     width: '160px',
-    marginTop: 40,
+    marginTop: 30,
     marginRight: 'auto',
     marginLeft: 'auto',
   },
   adorn: {
     color: '#3A8DFF',
     textDecoration: 'none',
-    fontSize: '0.8em',
+    fontSize: '1.1em',
     fontWeight: 'bold',
-  }
+  },
 }));
 
 const FormInput = ({ label, name, type, inputProps }) => {
@@ -84,8 +89,8 @@ const AuthForm = ({ mode, action }) => {
     const formElements = form.elements;
     const email = formElements.email.value;
     const password = formElements.password.value;
-    
-    if (isRegister){
+
+    if (isRegister) {
       const username = formElements.username.value;
       await action({ username, email, password });
       return;
@@ -93,24 +98,31 @@ const AuthForm = ({ mode, action }) => {
     await action({ email, password });
   };
 
+  const formLabel = isRegister ? 'Create an account.' : 'Welcome back!';
 
-  const formLabel =
-    isRegister ? 'Create an account.' : 'Welcome back!';
-  
   const buttonText = isRegister ? 'Create' : 'Login';
 
   return (
     <form className={classes.formContainer} onSubmit={handleRegister}>
-      <Typography align="left" variant="h4">
+      <Typography className={classes.formLabel}>
         {formLabel}
       </Typography>
       <Grid className={classes.formGrid}>
-        {isRegister && <FormInput label="Username" name="username" type="text" />}
+        {isRegister && (
+          <FormInput label="Username" name="username" type="text" />
+        )}
         <FormInput label="E-mail address" type="email" name="email" />
         <FormInput
           type="password"
           label="Password"
-          inputProps={{ minLength: 6, endAdornment: !isRegister && <a className={classes.adorn} href="/" target="_blank">Forgot?</a> }}
+          inputProps={{
+            minLength: 6,
+            endAdornment: !isRegister && (
+              <a className={classes.adorn} href="/" target="_blank">
+                Forgot?
+              </a>
+            ),
+          }}
           name="password"
         />
         <Button
