@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Route, Switch, withRouter } from "react-router-dom";
 
-import Signup from "./Signup.js";
-import Login from "./Login.js";
+import AuthPage from './components/Auth/AuthPage.js';
 import { SnackbarError, Home } from "./components";
 import { SocketContext, socket } from "./context/socket";
 
@@ -99,11 +98,11 @@ const Routes = (props) => {
       <Switch>
         <Route
           path="/login"
-          render={() => <Login user={user} login={login} />}
+          render={() => <AuthPage user={user} login={login} />}
         />
         <Route
           path="/register"
-          render={() => <Signup user={user} register={register} />}
+          render={() => <AuthPage user={user} register={register} />}
         />
         <Route
           exact
@@ -112,7 +111,7 @@ const Routes = (props) => {
             user?.id ? (
               <Home user={user} logout={logout} />
             ) : (
-              <Signup user={user} register={register} />
+              <AuthPage user={user} register={register} />
             )
           }
         />
