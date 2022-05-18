@@ -87,15 +87,15 @@ const AuthForm = ({ mode, action }) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formElements = form.elements;
-    const email = formElements.email.value;
+    const username = formElements.username.value;
     const password = formElements.password.value;
-
+    
     if (isRegister) {
-      const username = formElements.username.value;
+      const email = formElements.email.value;
       await action({ username, email, password });
       return;
     }
-    await action({ email, password });
+    await action({ username, password });
   };
 
   const formLabel = isRegister ? 'Create an account.' : 'Welcome back!';
@@ -108,7 +108,7 @@ const AuthForm = ({ mode, action }) => {
         {formLabel}
       </Typography>
       <Grid className={classes.formGrid}>
-        {isRegister && (
+        {!isRegister && (
           <FormInput label="Username" name="username" type="text" />
         )}
         <FormInput label="E-mail address" type="email" name="email" />

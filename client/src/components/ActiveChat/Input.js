@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, FilledInput, InputAdornment } from '@material-ui/core';
+import { FormControl, FilledInput, InputAdornment, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
-  const [images, setImages] = useState('');
+  const [images, setImages] = useState([]);
 
   const handleChange = event => {
     setText(event.target.value);
@@ -41,13 +41,28 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       recipientId: otherUser.id,
       conversationId,
       sender: conversationId ? null : user,
+      attachments: images
     };
     await postMessage(reqBody);
     setText('');
+    setImages([]);
   };
 
-  const handleFileChoose = event => {
-    setImages(event.target.files);
+  const handleFileChoose = async event => {
+    const files = event.target.files
+    if (files.length > 0) {
+      for (let index = 0; index < files.length; index++) {
+        const data = new FormData();
+        data.append('file', files[index]);
+        data.append('upload_preset', 'hatchyless3')
+        const res = await fetch(`https://api.cloudinary.com/v1_1/ebdev8/image/upload`, {
+          method: 'POST',
+          body: data
+        })
+        const {url} = await res.json()
+        setImages((prevImages) => [...prevImages, url]);
+      }
+    }
   };
 
   const inputAdornment = (
@@ -70,6 +85,9 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>
+        {images.length > 0 && (
+          <Typography>{images.length} Images Uploaded</Typography>
+        )}
         <FilledInput
           classes={{ root: classes.input }}
           disableUnderline
