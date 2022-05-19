@@ -12,19 +12,24 @@ const useStyles = makeStyles(() => ({
   },
   image: {
     maxWidth: '100%',
-    maxHeight: '100%',
   },
   imageOne: {
     borderRadius: '10px 10px 0 0px',
   },
   imagePlus: {
+    marginLeft: 5,
     borderRadius: '10px 10px 0px 10px',
   },
   bubble: {
     background: '#F4F6FA',
     borderRadius: '10px 10px 0 10px',
-    marginBottom: '10px',
+    marginBottom: 5,
   },
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '100%',
+  }
 }));
 
 const MessageContent = ({ text, attachments }) => {
@@ -34,7 +39,7 @@ const MessageContent = ({ text, attachments }) => {
       return (
         <Box className={classes.bubble}>
           <img
-            className={`${classes.image} ${classes.imageOne}`}
+            className={`${classes.image} ${text !== '' ? classes.imageOne : classes.imagePlus}`}
             src={`${attachments[0]}`}
             alt={'user upload'}
           />
@@ -51,17 +56,17 @@ const MessageContent = ({ text, attachments }) => {
             <Typography className={classes.text}>{text}</Typography>
           </Box>
         )}
-        <ImageList>
+        <Box className={classes.container}>
           {attachments.map(image => (
-            <ImageListItem key={image}>
+            <Box key={image} className={`${classes.image} ${classes.imagePlus}`}>
               <img
                 className={`${classes.image} ${classes.imagePlus}`}
                 src={`${image}`}
                 alt={'user upload'}
               />
-            </ImageListItem>
+            </Box>
           ))}
-        </ImageList>
+        </Box>
       </>
     );
   }
