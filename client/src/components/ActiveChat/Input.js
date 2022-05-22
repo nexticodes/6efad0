@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormControl, FilledInput, InputAdornment, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
-import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,6 +20,9 @@ const useStyles = makeStyles(() => ({
     marginRight: '10px',
     cursor: 'pointer',
   },
+  attachments: {
+    transform: 'rotateX(180deg) scale(0.9)',
+  }
 }));
 
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
@@ -77,7 +80,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         multiple
       />
       <label htmlFor="image-upload">
-        <InsertPhotoIcon className={classes.adornment} />
+        <FilterNoneOutlinedIcon className={`${classes.adornment} ${classes.attachments}`}/>
       </label>
     </InputAdornment>
   );
