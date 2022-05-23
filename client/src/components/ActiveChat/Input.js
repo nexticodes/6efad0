@@ -61,8 +61,8 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     const files = event.target.files;
     if (files.length > 0) {
       const promises = [];
+      const instance = axios.create();
       for (let index = 0; index < files.length; index++) {
-        const instance = axios.create();
         const data = new FormData();
         data.append('file', files[index]);
         data.append('upload_preset', 'hatchyless3');
