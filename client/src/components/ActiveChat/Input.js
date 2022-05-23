@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { FormControl, FilledInput, InputAdornment, Typography } from '@material-ui/core';
+import axios from 'axios';
+import {
+  FormControl,
+  FilledInput,
+  InputAdornment,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
 import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
@@ -22,7 +28,7 @@ const useStyles = makeStyles(() => ({
   },
   attachments: {
     transform: 'rotateX(180deg) scale(0.9)',
-  }
+  },
 }));
 
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
@@ -44,7 +50,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       recipientId: otherUser.id,
       conversationId,
       sender: conversationId ? null : user,
-      attachments: images
+      attachments: images,
     };
     await postMessage(reqBody);
     setText('');
@@ -52,19 +58,21 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   };
 
   const handleFileChoose = async event => {
-    const files = event.target.files
+    const files = event.target.files;
     if (files.length > 0) {
+      const promises = [];
       for (let index = 0; index < files.length; index++) {
+        const instance = axios.create();
         const data = new FormData();
         data.append('file', files[index]);
-        data.append('upload_preset', 'hatchyless3')
-        const res = await fetch(`https://api.cloudinary.com/v1_1/ebdev8/image/upload`, {
-          method: 'POST',
-          body: data
-        })
-        const {url} = await res.json()
-        setImages((prevImages) => [...prevImages, url]);
+        data.append('upload_preset', 'hatchyless3');
+        promises.push(
+          instance.post(`https://api.cloudinary.com/v1_1/ebdev8/image/upload`, data)
+        );
       }
+      const dataArray = await Promise.all(promises);
+      const imageUrls = dataArray.map((image) => image.data.url);
+      setImages(imageUrls);
     }
   };
 
@@ -80,7 +88,9 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         multiple
       />
       <label htmlFor="image-upload">
-        <FilterNoneOutlinedIcon className={`${classes.adornment} ${classes.attachments}`}/>
+        <FilterNoneOutlinedIcon
+          className={`${classes.adornment} ${classes.attachments}`}
+        />
       </label>
     </InputAdornment>
   );
