@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { FormControl, FilledInput } from '@material-ui/core';
+import axios from 'axios';
+import {
+  FormControl,
+  FilledInput,
+  InputAdornment,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAlt';
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -13,17 +21,26 @@ const useStyles = makeStyles(() => ({
     borderRadius: 8,
     marginBottom: 20,
   },
+  adornment: {
+    color: 'gray',
+    marginRight: '10px',
+    cursor: 'pointer',
+  },
+  attachments: {
+    transform: 'rotateX(180deg) scale(0.9)',
+  },
 }));
 
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
+  const [images, setImages] = useState([]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setText(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const form = event.currentTarget;
     const formElements = form.elements;
@@ -33,14 +50,57 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       recipientId: otherUser.id,
       conversationId,
       sender: conversationId ? null : user,
+      attachments: images,
     };
     await postMessage(reqBody);
     setText('');
+    setImages([]);
   };
+
+  const handleFileChoose = async event => {
+    const files = event.target.files;
+    if (files.length > 0) {
+      const promises = [];
+      const instance = axios.create();
+      for (let index = 0; index < files.length; index++) {
+        const data = new FormData();
+        data.append('file', files[index]);
+        data.append('upload_preset', 'hatchyless3');
+        promises.push(
+          instance.post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, data)
+        );
+      }
+      const dataArray = await Promise.all(promises);
+      const imageUrls = dataArray.map((image) => image.data.url);
+      setImages(imageUrls);
+    }
+  };
+
+  const inputAdornment = (
+    <InputAdornment position="end">
+      <SentimentSatisfiedAltIcon className={classes.adornment} />
+      <input
+        style={{ display: 'none' }}
+        id="image-upload"
+        type="file"
+        onChange={handleFileChoose}
+        accept="image/*"
+        multiple
+      />
+      <label htmlFor="image-upload">
+        <FilterNoneOutlinedIcon
+          className={`${classes.adornment} ${classes.attachments}`}
+        />
+      </label>
+    </InputAdornment>
+  );
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>
+        {images.length > 0 && (
+          <Typography>{images.length} Images Uploaded</Typography>
+        )}
         <FilledInput
           classes={{ root: classes.input }}
           disableUnderline
@@ -48,6 +108,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           value={text}
           name="text"
           onChange={handleChange}
+          endAdornment={inputAdornment}
         />
       </FormControl>
     </form>

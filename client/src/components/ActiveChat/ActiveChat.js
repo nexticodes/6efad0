@@ -37,6 +37,7 @@ const ActiveChat = ({
     return obj !== {} && obj !== undefined;
   };
 
+
   return (
     <Box className={classes.root}>
       {isConversation(conversation) && conversation.otherUser && (
@@ -51,7 +52,7 @@ const ActiveChat = ({
                 <Messages
                   messages={conversation.messages}
                   otherUser={conversation.otherUser}
-                  userId={user.id}
+                  user={user}
                 />
                 <Input
                   otherUser={conversation.otherUser}

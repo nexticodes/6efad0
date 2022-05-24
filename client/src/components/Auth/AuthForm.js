@@ -89,7 +89,7 @@ const AuthForm = ({ mode, action }) => {
     const formElements = form.elements;
     const email = formElements.email.value;
     const password = formElements.password.value;
-
+    
     if (isRegister) {
       const username = formElements.username.value;
       await action({ username, email, password });
