@@ -67,7 +67,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         data.append('file', files[index]);
         data.append('upload_preset', 'hatchyless3');
         promises.push(
-          instance.post(`https://api.cloudinary.com/v1_1/ebdev8/image/upload`, data)
+          instance.post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, data)
         );
       }
       const dataArray = await Promise.all(promises);
